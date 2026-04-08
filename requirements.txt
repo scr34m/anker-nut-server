@@ -1,0 +1,6 @@
+cryptography
+aiohttp
+aiofiles
+paho-mqtt
+python-dotenv
+poetry

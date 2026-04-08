@@ -1,0 +1,25 @@
+{
+  "devices": [
+    {
+      "serial": "YOUR_DEVICE_SERIAL_1",
+      "ups_name": "device_1_name"
+    },
+    {
+      "serial": "YOUR_DEVICE_SERIAL_2", 
+      "ups_name": "device_2_name"
+    }
+  ],
+  "anker": {
+    "username": "your_email@example.com",
+    "password": "your_password",
+    "country_code": "US"
+  },
+  "nut": {
+    "host": "127.0.0.1",
+    "port": 3493
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  }
+}
