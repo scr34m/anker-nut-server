@@ -9,6 +9,7 @@ from api.api import AnkerSolixApi
 from aiohttp.client_exceptions import ClientError
 from aiohttp import ClientSession
 from typing import Any
+import time
 import logging
 import asyncio
 
@@ -47,10 +48,6 @@ class AnkerMqttMonitor:
 
                 await asyncio.sleep(2)
 
-                # Published immediate status request
-                for sn, device in self.devices.items():
-                    mqtt_session.status_request(deviceDict=device, wait_for_publish=5).is_published()
-
                 poller_task = None
                 try:
                     # Start the background poller with subscriptions and update trigger
@@ -63,8 +60,18 @@ class AnkerMqttMonitor:
                         )
                     )
 
+                    last_request = 0
+                    interval = 10
                     while True:
                         await asyncio.sleep(1)
+
+                        # Published immediate status request
+                        now = time.time()
+                        if now - last_request >= interval:
+                            for sn, device in self.devices.items():
+                                mqtt_session.status_request(deviceDict=device)
+                            last_request = now
+
                         if not (mqtt_session and mqtt_session.is_connected()):
                             LOG.error("❌ MQTT client disconnected...")
                             break
