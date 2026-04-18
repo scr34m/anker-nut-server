@@ -79,15 +79,15 @@ class SimpleAnkerNUTServer:
         if ups_name not in self.ups_data:
             self.ups_data[ups_name] = {}
 
-        self.ups_data[ups_name]["ups.realpower"] = data["output_power_total"] # ac_output_power
-        self.ups_data[ups_name]["input.realpower"] = data["grid_to_battery_power"]
+        self.ups_data[ups_name]["ups.realpower"] = data.get("output_power_total", 0) # ac_output_power
+        self.ups_data[ups_name]["input.realpower"] = data.get("grid_to_battery_power", 0)
 
-        self.ups_data[ups_name]["battery.charge"] = data["main_battery_soc"]
+        self.ups_data[ups_name]["battery.charge"] = data.get("main_battery_soc", 0)
 
-        self.ups_data[ups_name]["battery.temperature"] = data["temperature"]
+        self.ups_data[ups_name]["battery.temperature"] = data.get("temperature", 0)
 
         # so so calculation
-        self.ups_data[ups_name]["battery.runtime"] = int(data["remaining_time_hours"] * 3600)
+        self.ups_data[ups_name]["battery.runtime"] = int(data.get("remaining_time_hours", 0) * 3600)
 
         self.ups_data[ups_name]["battery.status"] = "CHRG" # ONBATT TODO
 
