@@ -174,6 +174,32 @@ class SimpleAnkerNUTServer:
                 else:
                     return f"ERR UNKNOWN-UPS\n"
 
+        elif command.startswith("GET TYPE "):
+            parts = command.split(" ")
+            if len(parts) >= 4:
+                ups_name = parts[2]
+                var_name = parts[3]
+                return f"TYPE {ups_name} {var_name} \"NUMBER\"\n"
+
+        elif command.startswith("GET DESC "):
+            parts = command.split(" ")
+            if len(parts) >= 4:
+                ups_name = parts[2]
+                var_name = parts[3]
+                return f"DESC {ups_name} {var_name} \"Not implemented\"\n"
+
+        elif command.startswith("LIST CMD"):
+            parts = command.split(" ")
+            if len(parts) == 3:
+                ups_name = parts[2]
+                return f"BEGIN LIST CMD {ups_name}\n" + f"END LIST CMD {ups_name}\n"
+
+        elif command.startswith("GET UPSDESC"):
+            parts = command.split(" ")
+            if len(parts) == 3:
+                ups_name = parts[2]
+                return f"UPSDESC {ups_name} \"Not implemented\"\n"
+
         elif command == "USERNAME admin":
             return "OK\n"
 
@@ -197,14 +223,14 @@ class SimpleAnkerNUTServer:
 
         data = self.ups_data[ups_name]
         variables = [
-            f"VAR {ups_name} battery.charge {data.get('battery.charge', 0)}",
-            f"VAR {ups_name} battery.temperature {data.get('battery.temperature', 0)}",
-            f"VAR {ups_name} battery.runtime {data.get('battery.runtime', 0)}",
-            f"VAR {ups_name} battery.status {data.get('battery.status', 'UNKNOWN')}",
-            f"VAR {ups_name} ups.realpower {data.get('ups.realpower', 0)}",
-            f"VAR {ups_name} ups.status {data.get('ups.status', 'UNKNOWN')}",
-            f"VAR {ups_name} ups.timestamp {data.get('ups.timestamp', 0)}",
-            f"VAR {ups_name} input.realpower {data.get('input.realpower', 0)}",
+            f"VAR {ups_name} battery.charge \"{data.get('battery.charge', 0)}\"",
+            f"VAR {ups_name} battery.temperature \"{data.get('battery.temperature', 0)}\"",
+            f"VAR {ups_name} battery.runtime \"{data.get('battery.runtime', 0)}\"",
+            f"VAR {ups_name} battery.status \"{data.get('battery.status', 'UNKNOWN')}\"",
+            f"VAR {ups_name} ups.realpower \"{data.get('ups.realpower', 0)}\"",
+            f"VAR {ups_name} ups.status \"{data.get('ups.status', 'UNKNOWN')}\"",
+            f"VAR {ups_name} ups.timestamp \"{data.get('ups.timestamp', 0)}\"",
+            f"VAR {ups_name} input.realpower \"{data.get('input.realpower', 0)}\"",
         ]
 
         return f"BEGIN LIST VAR {ups_name}\n" + "\n".join(variables) + f"\nEND LIST VAR {ups_name}\n"
